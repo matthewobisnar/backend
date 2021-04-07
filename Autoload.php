@@ -26,7 +26,6 @@ class Autoload
         $filename = __DIR__ . "/" . str_replace("\\", "/", $class) . $ext;
 
         if (file_exists($filename)) {
-
             require $filename;
             $this->namespaces[] = $filename;
             return;

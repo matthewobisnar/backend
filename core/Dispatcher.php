@@ -18,9 +18,9 @@ class Dispatcher
 
         if (empty($request)) $this->classNotFound();
 
-        list($controller, $action) = explode("/", $request);
-        
-        $controller = $this->camelCase($controller);
+        list($controller, $action) = array_pad(preg_split('/[?\/]/', $request), 2,2);
+
+        $controller = $this->camelCase($controller) . "Controller";
         $action = "action" . $this->camelCase($action);
         $className = "\\Api\\Controllers\\{$controller}";
 

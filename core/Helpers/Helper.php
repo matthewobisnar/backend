@@ -1,5 +1,5 @@
 <?php
-namespace Api\Models;
+namespace Core\Helpers;
 
 class Helper 
 {
@@ -18,6 +18,11 @@ class Helper
 
     }
 
+    public static function getRequest()
+    {
+        return $_GET;
+    }
+    
     public static function parseConfig($string)
     {
         return json_decode($string, 1);
@@ -39,5 +44,15 @@ class Helper
         }
 
         return null;
+    }
+
+    public static function response()
+    {
+        ob_clean();
+        ob_flush();
+
+        var_dump(func_get_args());
+        
+        die(json_encode(func_get_args()));
     }
 }
