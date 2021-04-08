@@ -55,6 +55,7 @@ class MigrationModel
         return (new Database())->processQuery(
             "CREATE TABLE `message` (
             `message_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+            `message_code` varchar(16) COLLATE utf8_unicode_ci NOT NULL,
             `message_chat_room_code` varchar(16) COLLATE utf8_unicode_ci NOT NULL,
             `message_content` text COLLATE utf8_unicode_ci NOT NULL,
             `message_status` tinyint(1) NOT NULL DEFAULT '1',

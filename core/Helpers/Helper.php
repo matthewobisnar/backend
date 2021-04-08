@@ -3,6 +3,14 @@ namespace Core\Helpers;
 
 class Helper 
 {
+    public const DIE = true;
+    public const RETURN = false;
+    public const CREATED_BY = 'SYSTEM';
+    
+    public const ALPHA_NUMERIC = 'ALPHA_NUMERIC';
+    public const ALPHABET = 'ALPHABET';
+    public const NUMERIC = 'NUMERIC';
+
     public static function postRequest() {
     
         if (isset($_SERVER['CONTENT_TYPE']) 
@@ -16,6 +24,33 @@ class Helper
             return $_POST;
         }
 
+    }
+
+    public static function Randomizer ($length = 20, $CHARACTER = Helper::ALPHA_NUMERIC) 
+    {
+        $RANDOMIZER = [
+            'ALPHA_NUMERIC' => array_merge(range(0,9), range('a', 'z'), range('A','Z')),
+            'ALPHABET' => range('a','z'),
+            'NUMERIC' => range(0,9),
+        ];
+
+        $rand = $RANDOMIZER[$CHARACTER];
+        $output=[];
+        $temp =[];
+        $count = 0;
+
+        while ($count < $length) {
+            $output[] = $rand[mt_rand(0, $length)];
+            $temp[] = $rand[$count];
+
+            if ($output[$count] == $temp[$count]) {
+                $output[$count] = $rand[mt_rand(0, $length)];
+            }
+
+            $count++;
+        }
+
+        return implode("", $output);
     }
 
     public static function getRequest()
@@ -46,13 +81,31 @@ class Helper
         return null;
     }
 
-    public static function response()
+    public static function response($die = Helper::DIE, $status = true, $error = false, $content = [])
     {
         ob_clean();
         ob_flush();
 
-        var_dump(func_get_args());
+        if ($die) {
+            die(json_encode(array('status'=>$status, 'error' => $error, 'content' => $content)));
+        }
         
-        die(json_encode(func_get_args()));
+       return is_array($content) ? json_encode($content) : $content;
+    }
+
+    public static function fetchRequiredData ($param, $key)
+    {
+        return isset($param[$key]) && $param[$key] != '' ? $param[$key] : die("Unable to locate (".$key."). parameter."); 
+    }
+
+    public static function fetchDataFromArray($param, $key)
+    {
+        return isset($param[$key]) && $param[$key] != '' ? $param[$key] : null;
+    }
+
+    public static function AllowAccessOrigin()
+    {
+        header("Access-Control-Allow-Origin: *");
+        header("Access-Control-Allow-Headers: *");
     }
 }

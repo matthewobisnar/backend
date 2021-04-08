@@ -1,6 +1,8 @@
 <?php
 namespace Core;
 
+use Core\Helpers\Helper;
+
 class Dispatcher
 {
     public $server;
@@ -8,8 +10,8 @@ class Dispatcher
 
     public function __construct($server)
     {
+        Helper::AllowAccessOrigin();
         $this->server = $server;
-
     }
 
     public function run()
@@ -18,7 +20,7 @@ class Dispatcher
 
         if (empty($request)) $this->classNotFound();
 
-        list($controller, $action) = array_pad(preg_split('/[?\/]/', $request), 2,2);
+        list($controller, $action) = array_pad(preg_split('/[?#\/]/', $request), 2,2);
 
         $controller = $this->camelCase($controller) . "Controller";
         $action = "action" . $this->camelCase($action);
